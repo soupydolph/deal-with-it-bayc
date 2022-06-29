@@ -50,14 +50,12 @@ function App() {
 
     context.drawImage(
       ape, 0, 0, 
-      ape.width,
-      ape.height,     
-      // source rectangle
-      0, 0, canvas.width, canvas.height
+      canvas.width,
+      canvas.height
     )
 
     context.drawImage(
-      glasses, 50, 160
+      glasses, 70, 170
     )
 
     context.drawImage(
