@@ -76,11 +76,19 @@ function App() {
 
   return (
     <div className="App">
-      <input type="file"
-        onChange={(e) => setSelectedFile(e.target.files[0])}
-      ></input>
-      <canvas width="500" height="500" ref={canvasRef}></canvas>
-      <button onClick={ () => saveImg() }>Save</button>
+      <div class="upload">
+        <input type="file"
+          onChange={(e) => setSelectedFile(e.target.files[0])}
+        ></input>
+      </div>
+
+      <div class="image">
+        <canvas width="500" height="500" ref={canvasRef}></canvas>
+      </div>
+
+      <div class="save">
+        <button onClick={ () => saveImg() }>Save</button>
+      </div>
     </div>
   );
 }
