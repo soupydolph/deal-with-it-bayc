@@ -8,9 +8,11 @@ import { useEffect, useRef, useState } from 'react';
 function App() {
 
   const [selectedFile, setSelectedFile] = useState("")
+  const [didGenerate, setDidGenerate] = useState(false)
 
   const images = [monkeh, glassesImg, textImg];
   let count = images.length;
+
   const ape = new Image();
   const glasses = new Image();
   const dealwithit = new Image();
@@ -19,14 +21,15 @@ function App() {
 
   useEffect(() => {
     if (selectedFile) {
-      setupCanvas();
+      setupImages();
     }
   })
 
-  const setupCanvas = () => {
+  const setupImages = () => {
     var reader = new FileReader();
 
     reader.onload = function(event) {
+      // uploaded image
       ape.src = event.target.result;
       glasses.src = glassesImg
       dealwithit.src = textImg
@@ -39,6 +42,7 @@ function App() {
     reader.readAsDataURL(selectedFile);
   }
 
+  // When count reaches 0, we're ready to render
   const counter = () => {
     count--;
     if (count === 0) createImage()
@@ -68,26 +72,45 @@ function App() {
     const canvas = canvasRef.current
 
     var dataURL = canvas.toDataURL("image/png");
-    var newTab = window.open('about:blank','image from canvas');
-    newTab.document.write("<img src='" + dataURL + "' alt='from canvas'/>");
+    var newTab = window.open('about:blank', `DEAL WITH IT ${new Date()}`);
+    newTab.document.write("<img src='" + dataURL + "' alt='DEAL WITH IT BAYC'/>");
+
+    setDidGenerate(true)
+  }
+
+  const resetEditor = () => {
+    setDidGenerate(false)
+    setSelectedFile("")
   }
 
   return (
     <div className="App">
-      <div class="upload">
-        <p>Upload a picture of your ape to generate an incredible 'Deal with it' version</p>
+
+    { !selectedFile &&
+      <div className="upload">
+        <p>🔜 Upload a picture of your ape to generate an incredible 'Deal with it' version 🔜</p>
         <input type="file"
           onChange={(e) => setSelectedFile(e.target.files[0])}
         ></input>
       </div>
+    }
 
-      <div class="image">
-        <canvas width="500" height="500" ref={canvasRef}></canvas>
+    { selectedFile &&
+      <div>
+        <div className="image">
+          <canvas width="500" height="500" ref={canvasRef}></canvas>
+        </div>
+    
+        <div className="save">
+          <p>Oh shit, that's! 🔥</p>
+          <button onClick={ () => saveImg() }>🔥 GENERATE 🔥</button>
+        </div>
       </div>
+    }
 
-      <div class="save">
-        <button onClick={ () => saveImg() }>Save</button>
-      </div>
+    { didGenerate &&
+      <button onClick={() => resetEditor() }>Make another?</button>
+    }
     </div>
   );
 }
