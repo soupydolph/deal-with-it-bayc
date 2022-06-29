@@ -102,8 +102,8 @@ function App() {
         </div>
     
         <div className="save">
-          <p>Oh shit, that's! 🔥</p>
-          <button onClick={ () => saveImg() }>🔥 GENERATE 🔥</button>
+          <p>Oh shit, that's 🔥!</p>
+          <button onClick={ () => saveImg() }>🔥 GET IMAGE 🔥</button>
         </div>
       </div>
     }
