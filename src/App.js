@@ -75,6 +75,7 @@ function App() {
   return (
     <div className="App">
       <div class="upload">
+        <p>Upload a picture of your ape to generate an incredible 'Deal with it' version</p>
         <input type="file"
           onChange={(e) => setSelectedFile(e.target.files[0])}
         ></input>
