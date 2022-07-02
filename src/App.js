@@ -23,6 +23,11 @@ function App() {
       redirect: 'follow'
     };
 
+    if (!window.ethereum) {
+      alert("Unsupported browser: Please use a browser compatible with MetaMask to connect your wallet - if you're on mobile, try MetaMask's browser, if you're on desktop, install the MetaMask extension")
+      return;
+    }
+
     // A Web3Provider wraps a standard Web3 provider, which is
     // what MetaMask injects as window.ethereum into each page
     const provider = new ethers.providers.Web3Provider(window.ethereum)
