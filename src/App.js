@@ -1,40 +1,27 @@
-import monkeh from './monkeh.png'
-import glassesImg from './deal-with-it.png'
-import textImg from './text.png'
+import { ethers } from "ethers";
+import { useEffect, useState } from 'react';
+
+import ImageSelect from "./screens/ImageSelect";
+import Generator from "./screens/Generator";
 
 import './App.css';
-import { useEffect, useRef, useState } from 'react';
-
-import { ethers } from "ethers";
 
 const apiKey = '6niM8j1h84S2doBvZHgyrkUBe7oDck86'
 
 function App() {
 
-  const [selectedFile, setSelectedFile] = useState("")
-  const [didGenerate, setDidGenerate] = useState(false)
+  const [selectedFile, setSelectedFile] = useState('')
+
   const [didConnectWallet, setDidConnectWallet] = useState(false)
   const [testImageUrl, setTestImageUrl] = useState('')
   const [nfts, setNfts] = useState('')
-
-  const images = [monkeh, glassesImg, textImg];
-  let count = images.length;
-
-  const ape = new Image();
-  const glasses = new Image();
-  const dealwithit = new Image();
-
-  const canvasRef = useRef(null)
+  const [currentScreen, setCurrentScreen] = useState('imageSelect')
+  const [didGenerate, setDidGenerate] = useState(false)
 
   useEffect(() => {
+    if(!didConnectWallet)
     connectToWeb3()
-  }, [])
-
-  useEffect(() => {
-    if (selectedFile) {
-      setupImages();
-    }
-  })
+  }, [didConnectWallet])
 
   const connectToWeb3 = async () => {
     var requestOptions = {
@@ -78,101 +65,51 @@ function App() {
           setDidConnectWallet(true)
         })
         .catch(error => console.log('error', error));
+
+      setDidConnectWallet(true)
     });
-  }
-
-  const setupImages = () => {
-    var reader = new FileReader();
-
-    reader.onload = function (event) {
-      // uploaded image
-      ape.src = event.target.result;
-      glasses.src = glassesImg
-      dealwithit.src = textImg
-
-      ape.onload = counter
-      glasses.onload = counter
-      dealwithit.onload = counter
-    };
-
-    reader.readAsDataURL(selectedFile);
-  }
-
-  // When count reaches 0, we're ready to render
-  const counter = () => {
-    count--;
-    if (count === 0) createImage()
-  }
-
-  const createImage = () => {
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-
-    context.drawImage(
-      ape, 0, 0,
-      canvas.width,
-      canvas.height
-    )
-
-    context.drawImage(
-      glasses, 70, 170
-    )
-
-    context.drawImage(
-      dealwithit, 0, 450,
-      canvas.width, 50
-    )
-  }
-
-  const saveImg = () => {
-    const canvas = canvasRef.current
-
-    var dataURL = canvas.toDataURL("image/png");
-    var newTab = window.open('about:blank', `DEAL WITH IT ${new Date()}`);
-    newTab.document.write("<img src='" + dataURL + "' alt='DEAL WITH IT BAYC'/>");
-
-    setDidGenerate(true)
   }
 
   const resetEditor = () => {
     setDidGenerate(false)
     setSelectedFile("")
+    setCurrentScreen("imageSelect")
+  }
+
+  const renderScreen = (selectedScreen) => {
+    switch (selectedScreen) {
+      case 'imageSelect':
+        return <ImageSelect 
+          setSelectedFile={setSelectedFile}
+          setCurrentScreen={setCurrentScreen}
+          nfts={nfts}
+          didConnectWallet={didConnectWallet}
+        />
+      
+      case 'generator':
+        return <Generator
+          resetEditor={resetEditor}
+          selectedFile={selectedFile}
+          setDidGenerate={setDidGenerate}
+          didGenerate={didGenerate}
+          nfts={nfts}
+        />
+
+      default:
+        <p>Something went wrong</p>
+    }
   }
 
   return (
     <div className="App">
 
-      {!selectedFile &&
-        <div className="upload">
-          <p>🔜 Upload a picture of your ape to generate an incredible 'Deal with it' version 🔜</p>
-          <input type="file"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-          ></input>
-        </div>
-      }
+      { renderScreen(currentScreen) }
 
-      {selectedFile &&
-        <div>
-          <div className="image">
-            <canvas width="500" height="500" ref={canvasRef}></canvas>
-          </div>
-
-          <div className="save">
-            <p>Oh shit, that's 🔥!</p>
-            <button onClick={() => saveImg()}>🔥 GET IMAGE 🔥</button>
-          </div>
-        </div>
-      }
-
-      { didGenerate &&
-        <button onClick={() => resetEditor()}>Make another?</button>
-      }
-
-      { didConnectWallet &&
+      {/* { didConnectWallet &&
         <img src={testImageUrl} />
-      }
+      } */}
 
-      <div>
+      {/* <div>
         <iframe
           title="penises"
           style={{ 'margin-top': '3rem' }}
@@ -180,7 +117,7 @@ function App() {
           src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1295847877&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
         >
         </iframe>
-      </div>
+      </div> */}
 
     </div>
   );
