@@ -40,9 +40,7 @@ function App() {
     // For this, you need the account signer...
     const signer = provider.getSigner()
 
-    const balance = await provider.getBalance("ethers.eth")
-
-    console.log(`balance: ${balance}}`)
+    // const balance = await provider.getBalance("ethers.eth")
 
     const url = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/getNFTs/`
 
