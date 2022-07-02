@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import ImageSelect from "./screens/ImageSelect";
 import Generator from "./screens/Generator";
@@ -13,15 +13,9 @@ function App() {
   const [selectedFile, setSelectedFile] = useState('')
 
   const [didConnectWallet, setDidConnectWallet] = useState(false)
-  const [testImageUrl, setTestImageUrl] = useState('')
   const [nfts, setNfts] = useState('')
   const [currentScreen, setCurrentScreen] = useState('imageSelect')
   const [didGenerate, setDidGenerate] = useState(false)
-
-  useEffect(() => {
-    if(!didConnectWallet)
-    connectToWeb3()
-  }, [didConnectWallet])
 
   const connectToWeb3 = async () => {
     var requestOptions = {
@@ -61,7 +55,6 @@ function App() {
         .then(result => {
           const nfts = JSON.parse(result).ownedNfts
           setNfts(nfts)
-          setTestImageUrl(nfts[1].media[0].gateway)
           setDidConnectWallet(true)
         })
         .catch(error => console.log('error', error));
@@ -83,6 +76,7 @@ function App() {
           setSelectedFile={setSelectedFile}
           setCurrentScreen={setCurrentScreen}
           nfts={nfts}
+          connectToWeb3={connectToWeb3}
           didConnectWallet={didConnectWallet}
         />
       
@@ -105,20 +99,15 @@ function App() {
 
       { renderScreen(currentScreen) }
 
-      {/* { didConnectWallet &&
-        <img src={testImageUrl} />
-      } */}
-
-      {/* <div>
+      <div>
         <iframe
           title="penises"
-          style={{ 'margin-top': '3rem' }}
+          style={{ 'marginTop': '3rem' }}
           allow="autoplay"
           src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1295847877&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
         >
         </iframe>
-      </div> */}
-
+      </div>
     </div>
   );
 }

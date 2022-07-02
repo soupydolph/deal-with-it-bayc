@@ -1,12 +1,22 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const ImageSelect = (props) => {
 
   const [showWallet, setShowWallet] = useState(false) 
 
+  useEffect(()=>{
+    if(!props.didConnectWallet) {
+      showWalletNfts()
+    }
+  }, [props.didConnectWallet])
+
   const handleUpload = (e) => {
     props.setCurrentScreen('generator')
     props.setSelectedFile(e.target.files[0])
+  }
+
+  const handleConnect = () => {
+    props.connectToWeb3()
   }
 
   const showWalletNfts = () => {
@@ -21,6 +31,7 @@ const ImageSelect = (props) => {
 
   const renderNftItems = () => {
     return props.nfts.map((nft, index) => <img 
+              key={`${index}-wallet-item`}
               width="100" 
               height="100"
               src={nft.media[0].gateway} 
@@ -34,7 +45,8 @@ const ImageSelect = (props) => {
     <div className="upload">
       <p>🔜 Upload a picture of your ape to generate an incredible 'Deal with it' version 🔜</p>
 
-      <button onClick={() => showWalletNfts() }>Connect wallet</button>
+      {/* <button onClick={() => showWalletNfts() }>Connect wallet</button> */}
+      <button onClick={() => handleConnect() }>Connect wallet</button>
 
       { showWallet && props.nfts &&
         <div>

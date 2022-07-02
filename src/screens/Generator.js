@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import monkeh from './../monkeh.png'
 import glassesImg from './../deal-with-it.png'
 import textImg from './../text.png'
 
@@ -12,7 +11,7 @@ const Generator = (props) => {
   const glasses = new Image();
   const dealwithit = new Image();
 
-  const images = [monkeh, glassesImg, textImg];
+  const images = [glassesImg, textImg];
 
   let count = images.length;
 
